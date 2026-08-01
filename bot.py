@@ -298,7 +298,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if text == BTN_ADD_INCOME:
         context.user_data["waiting_for"] = "income"
-        await update.message.reply_text("Введи суму надходження, наприклад:\n5000")
+        await update.message.reply_text(
+            "Введи суму надходження, наприклад:\n5000",
+            reply_markup=ReplyKeyboardMarkup([[BTN_BACK]], resize_keyboard=True)
+        )
         return
 
     # Якщо бот зараз чекає номер запису для видалення
@@ -337,7 +340,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if text == BTN_SET_BUDGET:
         context.user_data["waiting_for"] = "budget"
-        await update.message.reply_text("Введи суму місячного бюджету, наприклад:\n10000")
+        await update.message.reply_text(
+            "Введи суму місячного бюджету, наприклад:\n10000",
+            reply_markup=ReplyKeyboardMarkup([[BTN_BACK]], resize_keyboard=True)
+        )
         return
 
     if text == BTN_CHART:
@@ -441,6 +447,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Якщо бот зараз чекає суму бюджету
     if context.user_data.get("waiting_for") == "budget":
+        if text == BTN_BACK:
+            context.user_data["waiting_for"] = None
+            await update.message.reply_text("Скасовано.", reply_markup=MAIN_MENU)
+            return
+
         try:
             amount = float(text.replace(",", "."))
         except ValueError:
@@ -457,6 +468,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Якщо бот зараз чекає суму надходження
     if context.user_data.get("waiting_for") == "income":
+        if text == BTN_BACK:
+            context.user_data["waiting_for"] = None
+            await update.message.reply_text("Скасовано.", reply_markup=MAIN_MENU)
+            return
+
         try:
             amount = float(text.replace(",", "."))
         except ValueError:
