@@ -186,8 +186,15 @@ async def show_chart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     labels = [item[0] for item in sorted_items]
     values = [item[1] for item in sorted_items]
 
+    # Кожній категорії — свій колір
+    colors = [
+        "#FF6B6B", "#4ECDC4", "#FFD93D", "#6C5CE7", "#FF9F43",
+        "#1DD1A1", "#54A0FF", "#FF6FA1", "#A29BFE", "#00D2D3",
+    ]
+    bar_colors = [colors[i % len(colors)] for i in range(len(labels))]
+
     plt.figure(figsize=(8, 6))
-    bars = plt.bar(labels, values, color="#4C9AFF")
+    bars = plt.bar(labels, values, color=bar_colors)
 
     # Підписуємо суму над кожним стовпчиком
     for bar, value in zip(bars, values):
