@@ -1,6 +1,9 @@
 import sqlite3
 
-DB_NAME = "finhelper.db"
+import os
+
+DB_FOLDER = os.environ.get("DATA_FOLDER", ".")
+DB_NAME = os.path.join(DB_FOLDER, "finhelper.db")
 
 
 def init_db():
